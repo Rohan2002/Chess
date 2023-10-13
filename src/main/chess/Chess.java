@@ -25,7 +25,8 @@ class ReturnPiece {
 }
 
 class ReturnPlay {
-	enum Message {ILLEGAL_MOVE, DRAW, 
+	enum Message {
+		ILLEGAL_MOVE, DRAW, 
 				  RESIGN_BLACK_WINS, RESIGN_WHITE_WINS, 
 				  CHECK, CHECKMATE_BLACK_WINS,	CHECKMATE_WHITE_WINS, 
 				  STALEMATE};
@@ -37,7 +38,7 @@ class ReturnPlay {
 public class Chess {
 	
 	enum Player { white, black }
-	
+	public static int turns;
 	/**
 	 * Plays the next move for whichever player has the turn.
 	 * 
@@ -48,12 +49,16 @@ public class Chess {
 	 *         the contents of the returned ReturnPlay instance.
 	 */
 	public static ReturnPlay play(String move) {
-
-		/* FILL IN THIS METHOD */
+		Player activePlayer = turns % 2 == 0 ? Player.white : Player.black;
+		turns++;
+		System.out.println("Turn: " + turns);
+		ReturnPlay rp = new ReturnPlay();
+		ArrayList<ReturnPiece> rPieces = new ArrayList<>();
 		
-		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
-		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
-		return null;
+		rp.message = rp.message.ILLEGAL_MOVE;
+		rp.piecesOnBoard = rPieces;
+
+		return rp;
 	}
 	
 	
@@ -62,6 +67,7 @@ public class Chess {
 	 */
 	public static void start() {
 		/* FILL IN THIS METHOD */
+		turns = 0;
 	}
 }
 
