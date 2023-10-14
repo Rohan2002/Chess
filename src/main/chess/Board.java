@@ -1,8 +1,5 @@
 package chess;
 
-import java.io.File;
-import java.util.Arrays;
-
 import chess.Piece.Color;
 
 public class Board {
@@ -143,16 +140,4 @@ public class Board {
         }
         return sb.toString();
     }
-
-    public static void main(String[] args) {
-        Board b = new Board();
-        b.initBoard();
-        System.out.println(b);
-        Piece p = b.getPiece("h8");
-        System.out.println("Got Piece: " + p);
-
-        b.setPiece("e2", "e4");
-        System.out.println(b);
-    }
-
 }
