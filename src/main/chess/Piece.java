@@ -6,14 +6,21 @@
 package chess;
 
 public abstract class Piece {
-    enum Color { white, black };
-    enum PieceType {pawn, rook, knight, bishop, queen, king};
-    
+    enum Color {
+        white, black
+    };
+
+    enum PieceType {
+        pawn, rook, knight, bishop, queen, king
+    };
+
     private Color colorPiece;
     private PieceType pieceType;
     private FileRank fileRank;
+
+    public abstract boolean canMove(Board b, Piece nextPiece, FileRank nfr);
     
-    public Piece(Color c, PieceType p, FileRank fr){
+    public Piece(Color c, PieceType p, FileRank fr) {
         this.colorPiece = c;
         this.pieceType = p;
         this.fileRank = fr;
@@ -48,18 +55,5 @@ public abstract class Piece {
         String c = getColorPiece() == Color.black ? "b" : "w";
         return c + "_" + getPieceType() + "_" + getFileRank();
     }
-    
-    /*
-     * This method will allow the piece to move.
-     * @param: fdcd
-     *      rowIndex:  
-     */
-    public abstract boolean canMove(int rowIndex, int colIndex);
-    public abstract boolean moveTo(int rowIndex, int colIndex);
 
-    public boolean canMove(Board b, FileRank fr) {
-        return true;
-    }
-
-    
 }

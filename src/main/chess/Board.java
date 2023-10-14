@@ -1,6 +1,7 @@
 package chess;
 
 import java.io.File;
+import java.util.Arrays;
 
 import chess.Piece.Color;
 
@@ -15,29 +16,28 @@ public class Board {
     }
 
     public Piece[] createPawnRank(Color c) {
-        String rank = c == Color.black ? "b" : "e";
+        int rank = c == Color.black ? 7 : 2;
         Piece[] pawnRankPieces = new Piece[this._board_dim];
         for (int file = 0; file < pawnRankPieces.length; file++) {
-            int incrementFile = file + 1;
-            pawnRankPieces[file] = new Pawn(c, new FileRank(rank + incrementFile));
+            pawnRankPieces[file] = new Pawn(c, new FileRank("" + FileRank.files[file] + rank));
         }
         return pawnRankPieces;
     }
 
     public Piece[] createNonPawnRank(Color c) {
-        String rank = c == Color.black ? "a" : "h";
+        int rank = c == Color.black ? 8 : 1;
         Piece[] nonPawnRankPieces = new Piece[this._board_dim];
 
-        nonPawnRankPieces[0] = new Rook(c, new FileRank(rank + 1));
-        nonPawnRankPieces[1] = new Knight(c, new FileRank(rank + 2));
-        nonPawnRankPieces[2] = new Bishop(c, new FileRank(rank + 3));
-        
-        nonPawnRankPieces[3] = new Queen(c, new FileRank(rank + 4));
-        nonPawnRankPieces[4] = new King(c, new FileRank(rank + 5));
-        
-        nonPawnRankPieces[5] = new Bishop(c, new FileRank(rank + 6));
-        nonPawnRankPieces[6] = new Knight(c, new FileRank(rank + 7));
-        nonPawnRankPieces[7] = new Rook(c, new FileRank(rank + 8));
+        nonPawnRankPieces[0] = new Rook(c, new FileRank("" + FileRank.files[0] + rank));
+        nonPawnRankPieces[1] = new Knight(c, new FileRank("" + FileRank.files[1] + rank));
+        nonPawnRankPieces[2] = new Bishop(c, new FileRank("" + FileRank.files[2] + rank));
+
+        nonPawnRankPieces[3] = new Queen(c, new FileRank("" + FileRank.files[3] + rank));
+        nonPawnRankPieces[4] = new King(c, new FileRank("" + FileRank.files[4] + rank));
+
+        nonPawnRankPieces[5] = new Bishop(c, new FileRank("" + FileRank.files[5] + rank));
+        nonPawnRankPieces[6] = new Knight(c, new FileRank("" + FileRank.files[6] + rank));
+        nonPawnRankPieces[7] = new Rook(c, new FileRank("" + FileRank.files[7] + rank));
 
         return nonPawnRankPieces;
     }
@@ -81,41 +81,46 @@ public class Board {
     public Piece[][] getBoard() {
         return this.board;
     }
-    
-    public int getCol(FileRank fr){
+
+    public int getCol(FileRank fr) {
         return fr.getFile() - 'a';
     }
 
-    public int getRow(FileRank fr){
-        return 7 - fr.getRank();
+    public int getRow(FileRank fr) {
+        return 8 - fr.getRank();
     }
-    
-    public boolean setPiece(Piece p, String frString){
-        FileRank fr = new FileRank(frString);
 
-        if (!p.canMove(this, fr)){
+    public boolean setPiece(String currFrString, String nextFrString) {
+        FileRank cfr = new FileRank(currFrString);
+        FileRank nfr = new FileRank(nextFrString);
+
+        Piece currentPiece = getPiece(cfr);
+        Piece nextPiece = getPiece(nfr);
+
+        // illegal move.
+        // cannot move a null piece.
+        if (currentPiece == null) {
             return false;
         }
-        // Check if there is a existing piece at fr.
-        if (this.board[getRow(fr)][getCol(fr)] != null){
-            this.board[getRow(fr)][getCol(fr)] = null; // kill the existing piece;
+
+        // canMove will define the move and attack policies for a piece.
+        if (currentPiece.canMove(this, nextPiece, nfr)) {
+            this.board[getRow(nfr)][getCol(nfr)] = currentPiece; // new = current
+            currentPiece.setFileRank(nfr);
+            this.board[getRow(cfr)][getCol(cfr)] = null; // old = null
+            return true;
         }
-        this.board[getRow(fr)][getCol(fr)] = p;
-        FileRank prevFileRank = p.getFileRank();
-        System.out.println("prevFileRank: " + prevFileRank);
-        System.out.println("p: " + p);
-        
-        this.board[getRow(prevFileRank)][getCol(prevFileRank)] = null;
-        p.setFileRank(fr);
-        return true;
+        return false;
     }
-    
+
     public Piece getPiece(String fileRank) {
         FileRank fr = new FileRank(fileRank);
+        System.out.println(getRow(fr) + " " + getCol(fr));
         return this.board[getRow(fr)][getCol(fr)];
     }
-    
+
     public Piece getPiece(FileRank fr) {
+
         return this.board[getRow(fr)][getCol(fr)];
     }
 
@@ -143,11 +148,11 @@ public class Board {
         Board b = new Board();
         b.initBoard();
         System.out.println(b);
-        Piece p = b.getPiece("e1");
+        Piece p = b.getPiece("h8");
         System.out.println("Got Piece: " + p);
 
-        // b.setPiece(p, new FileRank("e4"));
-        // System.out.println(b);
+        b.setPiece("e2", "e4");
+        System.out.println(b);
     }
 
 }

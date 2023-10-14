@@ -6,15 +6,10 @@ public class Knight extends Piece {
     }
 
     @Override
-    public boolean canMove(int rowIndex, int colIndex) {
+    public boolean canMove(Board b, Piece nextPiece, FileRank nfr) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'canMove'");
     }
-
-    @Override
-    public boolean moveTo(int rowIndex, int colIndex) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'moveTo'");
-    }
+    
     
 }

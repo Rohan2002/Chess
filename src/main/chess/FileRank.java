@@ -4,7 +4,7 @@ import java.util.Objects;
 public class FileRank {
     private char file;
     private int rank;
-
+    public static char[] files = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
     /*
      * FileRank.
      * 
@@ -15,7 +15,7 @@ public class FileRank {
      */
     public FileRank(String fileRankString) {
         int file = fileRankString.charAt(0) - 'a'; // column index
-        int rank = fileRankString.charAt(1) - '1'; // row index
+        int rank = fileRankString.charAt(1) - '0'; // row index
 
         boundCheckFileRank(file, rank);
 
@@ -24,7 +24,7 @@ public class FileRank {
     }
 
     public void boundCheckFileRank(int file, int rank){
-        if (rank < 0 || rank > 8) {
+        if (rank < 1 || rank > 8) {
             throw new IllegalArgumentException("Invalid rank index (valid: 1 to 8): " + rank);
         }
         if (file < 0 || file > 7) {
