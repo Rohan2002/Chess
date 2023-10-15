@@ -56,4 +56,93 @@ public abstract class Piece {
         return c + "_" + getPieceType() + "_" + getFileRank();
     }
 
+    public boolean jumpDiagonal (Board b, Piece nextPiece, FileRank nfr)
+    {
+        FileRank curr = this.getFileRank();
+
+        int totalFile = nfr.getFile() - curr.getFile();
+        int totalRank = nfr.getRank() - curr.getRank();
+        
+        for(int i = 1; i < (Math.abs(totalFile)); i++)
+        {
+            if(totalFile > 0 && totalRank > 0)
+            {
+                if (b.getPiece(new FileRank("" + ((char) (nfr.getFile()-i)) + (nfr.getRank()-i))) != null)
+                {
+                    return false;
+                }
+            }
+            else if (totalFile < 0 && totalRank < 0)
+            {
+                if (b.getPiece(new FileRank("" + ((char) (nfr.getFile()+i)) + (nfr.getRank()+i))) != null)
+                {
+                    return false;
+                }
+            }
+            else if (totalFile < 0 && totalRank > 0)
+            {
+                if (b.getPiece(new FileRank("" + ((char) (nfr.getFile()+i)) + (nfr.getRank()-i))) != null)
+                {
+                    return false;
+                }
+            }
+            else if (totalFile > 0 && totalRank < 0)
+            {
+                if (b.getPiece(new FileRank("" + ((char) (nfr.getFile()-i)) + (nfr.getRank()+i))) != null)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean jumpStraight (Board b, Piece nextPiece, FileRank nfr)
+    {
+        FileRank curr = this.getFileRank();
+
+        int totalFile = nfr.getFile() - curr.getFile();
+        int totalRank = nfr.getRank() - curr.getRank();
+
+        char changingDimension = (Math.abs(totalFile) > 0) ? 'f' : 'r';
+        
+        for(int i = 1; i < (Math.abs(totalFile)+Math.abs(totalRank)); i++)
+        {
+            if(changingDimension == 'f')
+            {
+                if (totalFile > 0)
+                {
+                    if (b.getPiece(new FileRank("" + ((char) (nfr.getFile()-i)) + nfr.getRank())) != null)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (b.getPiece(new FileRank("" + ((char) (nfr.getFile()+i)) + nfr.getRank())) != null)
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                if (totalRank > 0)
+                {
+                    if (b.getPiece(new FileRank("" + nfr.getFile() + (nfr.getRank()-i))) != null)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (b.getPiece(new FileRank("" + nfr.getFile() + (nfr.getRank()+i))) != null)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }

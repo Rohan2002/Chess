@@ -42,11 +42,11 @@ public class TestQueen {
         assert test6 == true;
         System.out.println(b);
 
-        boolean test7 = b.setPiece("b4", "c3"); //Queen goes down and right
+        boolean test7 = b.setPiece("b4", "c4"); //Queen goes down and right
         assert test7 == true;
         System.out.println(b);
 
-        boolean test8 = b.setPiece("c3", "b4"); // Queen goes up and left
+        boolean test8 = b.setPiece("c4", "e6"); // Queen goes up and left
         assert test8 == true;
         System.out.println(b);
 

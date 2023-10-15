@@ -11,11 +11,10 @@ public class King extends Piece {
          * King moves one square at a time.
          * King can go in all directions
          */
+        FileRank curr = this.getFileRank();
         if (nextPiece == null)
         {
             // write move policies here.
-            FileRank curr = this.getFileRank();
-
             int totalFile = nfr.getFile() - curr.getFile();
             int totalRank = nfr.getRank() - curr.getRank();
 
@@ -27,6 +26,11 @@ public class King extends Piece {
         else
         {
             // write attack policies here.
+            FileRank nxt = nextPiece.getFileRank();
+            boolean nxtPieceIsLeftOrRight = Math.abs(nxt.getFile() - curr.getFile()) == 1;
+            boolean nxtPieceIsTop = Math.abs(nxt.getRank() - curr.getRank()) == 1;
+            boolean oppositeColors = this.getColorPiece() != nextPiece.getColorPiece();
+            return oppositeColors && nxtPieceIsLeftOrRight && nxtPieceIsTop;
         }
         return false;
     }

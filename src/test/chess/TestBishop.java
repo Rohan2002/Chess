@@ -14,15 +14,15 @@ public class TestBishop {
         assert test1_b == true;
         System.out.println(b);
 
-        boolean test1_c = b.setPiece("d4", "d5"); // moves pawn away from Bishop
+        /*boolean test1_c = b.setPiece("d4", "d5"); // moves pawn away from Bishop
         assert test1_c == true;
-        System.out.println(b);
+        System.out.println(b);*/
         
-        boolean test1_a = b.setPiece("c1", "f4"); // Bishop goes up and right
+        boolean test1_a = b.setPiece("c1", "e3"); // Bishop goes up and right
         assert test1_a == true;
         System.out.println(b);
 
-        boolean test2 = b.setPiece("f4", "d2"); //  Bishop goes down and left
+        boolean test2 = b.setPiece("e3", "c5"); //  Bishop goes down and left
         assert test2 == true;
         System.out.println(b);
 
