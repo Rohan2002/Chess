@@ -112,7 +112,6 @@ public class Board {
 
     public Piece getPiece(String fileRank) {
         FileRank fr = new FileRank(fileRank);
-        System.out.println(getRow(fr) + " " + getCol(fr));
         return this.board[getRow(fr)][getCol(fr)];
     }
 

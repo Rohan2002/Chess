@@ -31,7 +31,7 @@ run_custom:
 	java -cp $(BIN_DIR) chess.$(CUSTOM_CLASS)
 
 run_test:
-	java -cp $(BIN_DIR) src.test.chess.$(CUSTOM_TEST)
+	java -enableassertions -cp $(BIN_DIR) src.test.chess.$(CUSTOM_TEST)
 
 clean:
 	rm -rf $(BIN_DIR)
