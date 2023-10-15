@@ -13,33 +13,33 @@ public class Rook extends Piece {
          * Rook can go in all directions
          */
         FileRank curr = this.getFileRank();
-        if (nextPiece == null)
-        {
-            // write move policies here.
-            int totalFile = nfr.getFile() - curr.getFile();
-            int totalRank = nfr.getRank() - curr.getRank();
+        
+        // write move policies here.
+        int totalFile = nfr.getFile() - curr.getFile();
+        int totalRank = nfr.getRank() - curr.getRank();
 
-            if ((Math.abs(totalFile) <= 8 && Math.abs(totalRank) == 0) || 
-                (Math.abs(totalFile) == 0 && Math.abs(totalRank) <= 8))
+        if ((Math.abs(totalFile) <= 8 && Math.abs(totalRank) == 0) || 
+            (Math.abs(totalFile) == 0 && Math.abs(totalRank) <= 8))
+        {
+            if (jumpStraight(b, nextPiece, nfr))
             {
-                if (jumpStraight(b, nextPiece, nfr))
+                if (nextPiece == null)
+                {
+                    return true;
+                }
+                else if (this.getColorPiece() != nextPiece.getColorPiece())
                 {
                     return true;
                 }
                 else
                 {
                     return false;
-                }   
+                }
             }
-        }
-        else
-        {
-            // write attack policies here.
-            FileRank nxt = nextPiece.getFileRank();
-            boolean nxtPieceIsLeftOrRight = Math.abs(nxt.getFile() - curr.getFile()) == 1;
-            boolean nxtPieceIsTop = Math.abs(nxt.getRank() - curr.getRank()) == 1;
-            boolean oppositeColors = this.getColorPiece() != nextPiece.getColorPiece();
-            return oppositeColors && nxtPieceIsLeftOrRight && nxtPieceIsTop;
+            else
+            {
+                return false;
+            }   
         }
         return false;
     }

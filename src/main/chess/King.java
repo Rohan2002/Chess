@@ -12,25 +12,25 @@ public class King extends Piece {
          * King can go in all directions
          */
         FileRank curr = this.getFileRank();
-        if (nextPiece == null)
-        {
-            // write move policies here.
-            int totalFile = nfr.getFile() - curr.getFile();
-            int totalRank = nfr.getRank() - curr.getRank();
 
-            if (Math.abs(totalFile) <= 1 && Math.abs(totalRank) <= 1)
+        // write move policies here.
+        int totalFile = nfr.getFile() - curr.getFile();
+        int totalRank = nfr.getRank() - curr.getRank();
+
+        if (Math.abs(totalFile) <= 1 && Math.abs(totalRank) <= 1)
+        {
+            if (nextPiece == null)
             {
                 return true;
             }
-        }
-        else
-        {
-            // write attack policies here.
-            FileRank nxt = nextPiece.getFileRank();
-            boolean nxtPieceIsLeftOrRight = Math.abs(nxt.getFile() - curr.getFile()) == 1;
-            boolean nxtPieceIsTop = Math.abs(nxt.getRank() - curr.getRank()) == 1;
-            boolean oppositeColors = this.getColorPiece() != nextPiece.getColorPiece();
-            return oppositeColors && nxtPieceIsLeftOrRight && nxtPieceIsTop;
+            else if (this.getColorPiece() != nextPiece.getColorPiece())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         return false;
     }
