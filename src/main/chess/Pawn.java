@@ -1,7 +1,9 @@
 package chess;
 
+import java.lang.Math;
+
 public class Pawn extends Piece {
-    public Pawn(Color c, FileRank fr){
+    public Pawn(Color c, FileRank fr) {
         super(c, Piece.PieceType.pawn, fr);
     }
 
@@ -14,24 +16,31 @@ public class Pawn extends Piece {
          * Pawn cannot move backward.
          */
         Boolean isBlack = this.getColorPiece() == Color.black;
-        if (nextPiece == null){
+        FileRank curr = this.getFileRank();
+        if (nextPiece == null) {
             // write move policies here.
-            FileRank curr = this.getFileRank();
 
             int allowed_moves = 1;
             // Pawn is at the start row.
-            if ((isBlack && curr.getRank() == 7) || (!isBlack && curr.getRank() == 2)){
+            if ((isBlack && curr.getRank() == 7) || (!isBlack && curr.getRank() == 2)) {
                 allowed_moves = 2;
             }
 
-            if (curr.getFile() == nfr.getFile() && nfr.getRank() - curr.getRank() <= allowed_moves){
-                return true;
-            }
-        }
-        else{
+            boolean whitePawnUpwards = this.getColorPiece() == Color.white && nfr.getRank() - curr.getRank() > 0
+                    && nfr.getRank() - curr.getRank() <= allowed_moves;
+            boolean blackPawnDownwards = this.getColorPiece() == Color.black && curr.getRank() - nfr.getRank() > 0
+                    && curr.getRank() - nfr.getRank() <= allowed_moves;
+            
+            boolean sameColumn = curr.getFile() == nfr.getFile();
+            return sameColumn && (whitePawnUpwards || blackPawnDownwards);
+        } else {
             // write attack policies here.
+            FileRank nxt = nextPiece.getFileRank();
+            boolean nxtPieceIsLeftOrRight = Math.abs(nxt.getFile() - curr.getFile()) == 1;
+            boolean nxtPieceIsTop = nxt.getRank() - curr.getRank() == 1;
+            boolean oppositeColors = this.getColorPiece() != nextPiece.getColorPiece();
+            return oppositeColors && nxtPieceIsLeftOrRight && nxtPieceIsTop;
         }
-        return false;
     }
-    
+
 }
