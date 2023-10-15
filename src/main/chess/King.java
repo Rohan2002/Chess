@@ -7,8 +7,28 @@ public class King extends Piece {
 
     @Override
     public boolean canMove(Board b, Piece nextPiece, FileRank nfr) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'canMove'");
+        /*
+         * King moves one square at a time.
+         * King can go in all directions
+         */
+        if (nextPiece == null)
+        {
+            // write move policies here.
+            FileRank curr = this.getFileRank();
+
+            int totalFile = nfr.getFile() - curr.getFile();
+            int totalRank = nfr.getRank() - curr.getRank();
+
+            if (Math.abs(totalFile) <= 1 && Math.abs(totalRank) <= 1)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            // write attack policies here.
+        }
+        return false;
     }
     
 }
