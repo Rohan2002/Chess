@@ -27,20 +27,27 @@ public class TestPawn {
         boolean test5 = b.setPiece("e6", "e7"); // piece exists at e7.
         assert test5 == false;
 
-        b.initBoard();        
-        // attack sequence.
+        // attack sequence. white pawn attacks black pawn
+        b.initBoard();
         assert true == b.setPiece("e2", "e3");
         assert true == b.setPiece("d7", "d6");
         assert true == b.setPiece("d6", "d5");
         assert true == b.setPiece("d5", "d4");
         assert true == b.setPiece("e3", "d4"); // attack.
         
-        // move white back should be false
+        // attack sequence. black pawn attacks white pawn
+        b.initBoard();
+        assert true == b.setPiece("e7", "e5");
+        assert true == b.setPiece("e5", "e4");
+        assert true == b.setPiece("f2", "f3");
+        assert true == b.setPiece("e4", "f3"); // attack.
+
+        // move white back (instead of forward) should be false
         b.initBoard();
         assert true == b.setPiece("e2", "e4");
         assert false == b.setPiece("e4", "e3");
         
-        // move black back should be false
+        // move black back (instead of forward) should be false
         assert true == b.setPiece("e7", "e5");
         assert false == b.setPiece("e5", "e4");
         

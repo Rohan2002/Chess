@@ -37,7 +37,7 @@ public class Pawn extends Piece {
             // write attack policies here.
             FileRank nxt = nextPiece.getFileRank();
             boolean nxtPieceIsLeftOrRight = Math.abs(nxt.getFile() - curr.getFile()) == 1;
-            boolean nxtPieceIsTop = nxt.getRank() - curr.getRank() == 1;
+            boolean nxtPieceIsTop = Math.abs(nxt.getRank() - curr.getRank()) == 1;
             boolean oppositeColors = this.getColorPiece() != nextPiece.getColorPiece();
             return oppositeColors && nxtPieceIsLeftOrRight && nxtPieceIsTop;
         }
