@@ -25,5 +25,16 @@ public class TestKnight {
         assert test4 == true;
         System.out.println(b);
 
+        boolean test5 = b.setPiece("e7", "g8"); // white knight attack.
+        assert test5 == true;
+
+        boolean test6 = b.setPiece("g8", "e7"); // white knight attack.
+        assert test6 == true;
+        System.out.println(b);
+
+        boolean test7 = b.setPiece("e7", "g6"); // white knight attack.
+        assert test7 == true;
+        System.out.println(b);
+        
     }
 }
