@@ -55,39 +55,68 @@ public class Pawn extends Piece {
         }
     }
 
-    /*public boolean enpassant(Board b, FileRank nfr, Piece evalPiece, FileRank curr)
+    public boolean enpassant(Board b, FileRank nfr, Piece evalPiece, FileRank curr)
     {
-        if ()
-        {
-
-        }
         return true;
     }
 
-    public boolean willEnpassant(Board b, FileRank nfr, Piece evalPiece, FileRank curr, char changedPiece)
+    public boolean willEnpassant(Board b, FileRank nfr, Piece evalPiece, FileRank curr)
     {
-        char currFile = curr.getFile();
-        int currRank = curr.getRank(); 
-
-        char nextMoveFile = nfr.getFile();
-        int nextMoveRank = nfr.getRank();
-
-        Piece potentialEnpassantVictim = b.getPiece(new FileRank("" + ((char) (nfr.getFile()+1)) + (nfr.getRank())));
+        int currRank = curr.getRank();
 
         if (currRank == 5 && evalPiece.getColorPiece() == Piece.Color.white)
         {
-            if (nfr.equals(new FileRank("" + ((char) (curr.getFile()+1)) + (curr.getRank()+1))) || 
-                nfr.equals(new FileRank("" + ((char) (curr.getFile()-1)) + (curr.getRank()+1))) )
+            if (nfr.equals(new FileRank("" + ((char) (curr.getFile()+1)) + (curr.getRank()+1))))
             {
+                Piece potentialEnpassantVictim = b.getPiece(new FileRank("" + ((char) (nfr.getFile())) + (nfr.getRank()-1)));
                 if (potentialEnpassantVictim.getPieceType() == Piece.PieceType.pawn)
                 {
                     if (((Pawn) potentialEnpassantVictim).enpassant == true)
                     {
                         enpassant(b, nfr, evalPiece, curr);
+                        return true;
                     }
                 }
             }
-            return true;
+            else if (nfr.equals(new FileRank("" + ((char) (curr.getFile()-1)) + (curr.getRank()+1))))
+            {
+                Piece potentialEnpassantVictim = b.getPiece(new FileRank("" + ((char) (nfr.getFile())) + (nfr.getRank()-1)));
+                if (potentialEnpassantVictim.getPieceType() == Piece.PieceType.pawn)
+                {
+                    if (((Pawn) potentialEnpassantVictim).enpassant == true)
+                    {
+                        enpassant(b, nfr, evalPiece, curr);
+                        return true;
+                    }
+                }
+            }
+        }
+        else if (currRank == 4 && evalPiece.getColorPiece() == Piece.Color.black)
+        {
+            if (nfr.equals(new FileRank("" + ((char) (curr.getFile()+1)) + (curr.getRank()-1))))
+            {
+                Piece potentialEnpassantVictim = b.getPiece(new FileRank("" + ((char) (nfr.getFile())) + (nfr.getRank()+1)));
+                if (potentialEnpassantVictim.getPieceType() == Piece.PieceType.pawn)
+                {
+                    if (((Pawn) potentialEnpassantVictim).enpassant == true)
+                    {
+                        enpassant(b, nfr, evalPiece, curr);
+                        return true;
+                    }
+                }
+            }
+            else if (nfr.equals(new FileRank("" + ((char) (curr.getFile()-1)) + (curr.getRank()-1))))
+            {
+                Piece potentialEnpassantVictim = b.getPiece(new FileRank("" + ((char) (nfr.getFile())) + (nfr.getRank()+1)));
+                if (potentialEnpassantVictim.getPieceType() == Piece.PieceType.pawn)
+                {
+                    if (((Pawn) potentialEnpassantVictim).enpassant == true)
+                    {
+                        enpassant(b, nfr, evalPiece, curr);
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
@@ -99,5 +128,5 @@ public class Pawn extends Piece {
                 ((Pawn) p).enpassant = false;
             }
         }
-    }*/
+    }
 }
