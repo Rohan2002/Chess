@@ -179,8 +179,8 @@ public class Board {
 
         // canMove will define the move and attack policies for a piece.
         if (currentPiece.canMove(this, nextPiece, nfr)) {
-            if (this.getGameCheckmateObject() != null && currentPiece.getPieceType() == Piece.PieceType.king) {
-                // dont put the active king in check position.
+            if (this.getGameCheckmateObject() != null) {
+                // dont put the active piece in check position.
                 ArrayList<FileRank> kingCheckPositions = this.getGameCheckmateObject().getCheckMatePos();
                 for (FileRank kingPos : kingCheckPositions) {
                     if (nfr.equals(kingPos)) {
