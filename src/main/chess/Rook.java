@@ -1,6 +1,7 @@
 package chess;
 
 public class Rook extends Piece {
+    boolean hasMoved = false;
     public Rook(Color c, FileRank fr){
         super(c, Piece.PieceType.rook, fr);
     }
@@ -25,10 +26,12 @@ public class Rook extends Piece {
             {
                 if (nextPiece == null)
                 {
+                    hasMoved = true;
                     return true;
                 }
                 else if (this.getColorPiece() != nextPiece.getColorPiece())
                 {
+                    hasMoved = true;
                     return true;
                 }
                 else
