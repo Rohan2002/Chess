@@ -14,6 +14,9 @@ public class TestKing {
         boolean test0 = p.toString().equalsIgnoreCase("b_rook_h8");
         assert test0 == true;
 
+        boolean testEdgeCase = b.setPiece("e1", "e2");
+        assert testEdgeCase == false;
+
         boolean test1_b = b.setPiece("e2", "e4"); // moves pawn away from king
         assert test1_b == true;
         System.out.println(b);
