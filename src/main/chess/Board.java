@@ -13,6 +13,7 @@ public class Board {
     private Set<Piece> alivePieces;
     private Color activeColor;
     private CheckMate gameCheckMateObject;
+    private String pawnPromotionDefault;
 
     public Board() {
         this._board_dim = 8;
@@ -20,6 +21,7 @@ public class Board {
         this.alivePieces = new HashSet<Piece>();
         this.activeColor = null;
         this.gameCheckMateObject = null;
+        this.pawnPromotionDefault = "Q";
     }
 
     public Piece[] createPawnRank(Color c) {
@@ -86,6 +88,14 @@ public class Board {
         this.board[7] = createNonPawnRank(Color.white);
     }
 
+    public String getPawnPromotionDefault() {
+        return this.pawnPromotionDefault;
+    }
+
+    public void setPawnPromotionDefault(String pawnPromotionDefault) {
+        this.pawnPromotionDefault = pawnPromotionDefault;
+    }
+
     public CheckMate getGameCheckmateObject() {
         return this.gameCheckMateObject;
     }
@@ -118,6 +128,36 @@ public class Board {
         return 8 - fr.getRank();
     }
 
+    public void doPromotion(Piece currentPiece) {
+        FileRank currentPieceFr = currentPiece.getFileRank();
+
+        boolean whitePromotion = currentPiece.getPieceType() == Piece.PieceType.pawn
+                && currentPiece.getColorPiece() == Piece.Color.white && currentPieceFr.getRank() == 8;
+        boolean blackPromotion = currentPiece.getPieceType() == Piece.PieceType.pawn
+                && currentPiece.getColorPiece() == Piece.Color.black && currentPieceFr.getRank() == 1;
+
+        if (whitePromotion || blackPromotion) {
+            if (this.pawnPromotionDefault.equals("R")) {
+                Rook r = new Rook(currentPiece.getColorPiece(), currentPieceFr);
+                putPiece(r);
+            } else if (this.pawnPromotionDefault.equals("N")) {
+                Knight n = new Knight(currentPiece.getColorPiece(), currentPieceFr);
+                putPiece(n);
+            } else if (this.pawnPromotionDefault.equals("B")) {
+                Bishop b = new Bishop(currentPiece.getColorPiece(), currentPieceFr);
+                putPiece(b);
+            } else if (this.pawnPromotionDefault.equals("P")) {
+                King k = new King(currentPiece.getColorPiece(), currentPieceFr);
+                putPiece(k);
+            }
+            else{
+                // default is queen.
+                Queen q = new Queen(currentPiece.getColorPiece(), currentPieceFr);
+                putPiece(q);
+            }
+        }
+    }
+
     public boolean setPiece(String currFrString, String nextFrString) {
         // TODO: Cannot attack king
         FileRank cfr = new FileRank(currFrString);
@@ -139,8 +179,8 @@ public class Board {
 
         // canMove will define the move and attack policies for a piece.
         if (currentPiece.canMove(this, nextPiece, nfr)) {
-            if (this.getGameCheckmateObject() != null && currentPiece.getPieceType() == Piece.PieceType.king) {
-                // dont put the active king in check position.
+            if (this.getGameCheckmateObject() != null) {
+                // dont put the active piece in check position.
                 ArrayList<FileRank> kingCheckPositions = this.getGameCheckmateObject().getCheckMatePos();
                 for (FileRank kingPos : kingCheckPositions) {
                     if (nfr.equals(kingPos)) {
@@ -161,9 +201,26 @@ public class Board {
                 this.alivePieces.remove(nextPiece); // remove piece that was just attacked.
             }
             this.alivePieces.add(currentPiece); // add the updated piece back to the alive set.
+
+            // pawn promotion is done after it has been placed in the next position.
+            doPromotion(currentPiece);
+
             return true;
         }
         return false;
+    }
+
+    public void putPiece(Piece p) {
+        if (p == null) {
+            return;
+        }
+        FileRank fileRankP = p.getFileRank();
+        Piece existingPiece = this.board[getRow(fileRankP)][getCol(fileRankP)];
+        if (existingPiece != null && this.getAlivePieces().contains(existingPiece)) {
+            this.getAlivePieces().remove(existingPiece);
+        }
+        this.board[getRow(fileRankP)][getCol(fileRankP)] = p;
+        this.getAlivePieces().add(p);
     }
 
     public Piece getPiece(String fileRank) {

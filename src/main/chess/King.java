@@ -29,4 +29,14 @@ public class King extends Piece {
         return false;
     }
 
+    public boolean castling(Board b, FileRank nfr, Piece evalPiece, FileRank curr)
+    {
+        
+        return true;
+    }
+
+    public boolean willCastle(Board b, FileRank nfr, Piece evalPiece, FileRank curr)
+    {
+        return true;
+    }
 }

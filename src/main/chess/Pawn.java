@@ -3,6 +3,7 @@ package chess;
 import java.lang.Math;
 
 public class Pawn extends Piece {
+    boolean enpassant;
     public Pawn(Color c, FileRank fr) {
         super(c, Piece.PieceType.pawn, fr);
     }
@@ -30,10 +31,21 @@ public class Pawn extends Piece {
                     && nfr.getRank() - curr.getRank() <= allowed_moves;
             boolean blackPawnDownwards = this.getColorPiece() == Color.black && curr.getRank() - nfr.getRank() > 0
                     && curr.getRank() - nfr.getRank() <= allowed_moves;
-            
+
             boolean sameColumn = curr.getFile() == nfr.getFile();
+
+            /*else if (willEnpassant(b, nfr, nextPiece, curr, promo))
+            {
+                return true;
+            }*/
+            // else if (nfr.getRank() - curr.getRank() == 2 && (sameColumn && (whitePawnUpwards || blackPawnDownwards)))
+            // {
+            //     enpassant = true;
+            // }
+
             return sameColumn && (whitePawnUpwards || blackPawnDownwards);
-        } else {
+        } 
+        else {
             // write attack policies here.
             FileRank nxt = nfr;
             boolean nxtPieceIsLeftOrRight = Math.abs(nxt.getFile() - curr.getFile()) == 1;
@@ -43,4 +55,49 @@ public class Pawn extends Piece {
         }
     }
 
+    /*public boolean enpassant(Board b, FileRank nfr, Piece evalPiece, FileRank curr)
+    {
+        if ()
+        {
+
+        }
+        return true;
+    }
+
+    public boolean willEnpassant(Board b, FileRank nfr, Piece evalPiece, FileRank curr, char changedPiece)
+    {
+        char currFile = curr.getFile();
+        int currRank = curr.getRank(); 
+
+        char nextMoveFile = nfr.getFile();
+        int nextMoveRank = nfr.getRank();
+
+        Piece potentialEnpassantVictim = b.getPiece(new FileRank("" + ((char) (nfr.getFile()+1)) + (nfr.getRank())));
+
+        if (currRank == 5 && evalPiece.getColorPiece() == Piece.Color.white)
+        {
+            if (nfr.equals(new FileRank("" + ((char) (curr.getFile()+1)) + (curr.getRank()+1))) || 
+                nfr.equals(new FileRank("" + ((char) (curr.getFile()-1)) + (curr.getRank()+1))) )
+            {
+                if (potentialEnpassantVictim.getPieceType() == Piece.PieceType.pawn)
+                {
+                    if (((Pawn) potentialEnpassantVictim).enpassant == true)
+                    {
+                        enpassant(b, nfr, evalPiece, curr);
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public void resetEnpassant(Board b, Color color)
+    {
+        for (Piece p : b.getAlivePieces()) {
+            if (p.getColorPiece() == color && p.getPieceType() == Piece.PieceType.pawn) {
+                ((Pawn) p).enpassant = false;
+            }
+        }
+    }*/
 }

@@ -128,6 +128,9 @@ public class Chess {
 
 		String[] inputStrings = move.split(" ");
 		boolean drawWasAsked = inputStrings[inputStrings.length - 1].equals("draw?");
+		if (inputStrings.length > 2){
+			chessBoard.setPawnPromotionDefault(inputStrings[2]);
+		}
 
 		ReturnPlay rp = new ReturnPlay();
 		boolean setPieceStatus = false;
