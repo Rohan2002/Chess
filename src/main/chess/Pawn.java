@@ -69,33 +69,39 @@ public class Pawn extends Piece {
         }
     }
 
-    public Piece promotion(Board b, FileRank nfr, Piece evalPiece, FileRank curr, char changedPiece)
+    public void promotion(Board b, FileRank nfr, Piece evalPiece, FileRank curr, char changedPiece)
     {
         switch (changedPiece)
         {
             case 'N':
-                return new Knight(evalPiece.getColorPiece(), nfr);
+                b.getAlivePieces().add(new Knight(evalPiece.getColorPiece(), nfr));
+                break;
 
             case 'R':
-                return new Rook(evalPiece.getColorPiece(), nfr);
+                b.getAlivePieces().add(new Rook(evalPiece.getColorPiece(), nfr));
+                break;
 
             case 'B':
-                return new Bishop(evalPiece.getColorPiece(), nfr);
+                b.getAlivePieces().add(new Bishop(evalPiece.getColorPiece(), nfr));
+                b.setAlivePieces(b.getAlivePieces());
+                break;
 
             case 'Q':
-                return new Queen(evalPiece.getColorPiece(), nfr);
+                b.getAlivePieces().add(new Queen(evalPiece.getColorPiece(), nfr));
+                break;
 
-            default: 
-                return null;
+            case 'P':
+                b.getAlivePieces().add(new Pawn(evalPiece.getColorPiece(), nfr));
+                break;
         }
     }
 
     public boolean willPromote(Board b, FileRank nfr, Piece evalPiece, FileRank curr, char changedPiece)
     {
-        if ((this.getColorPiece() == Piece.Color.white && curr.getRank() == '8') || 
-                (this.getColorPiece() == Piece.Color.black && curr.getRank() == '1'))
+        if ((this.getColorPiece() == Piece.Color.white && nfr.getRank() == 8) || 
+                (this.getColorPiece() == Piece.Color.black && nfr.getRank() == 1))
         {
-            promotion(b,nfr,this,curr,promo);
+            promotion(b,nfr,this,curr,changedPiece);
             return true;
         }
         return false;
