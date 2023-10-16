@@ -35,7 +35,7 @@ public class Pawn extends Piece {
             return sameColumn && (whitePawnUpwards || blackPawnDownwards);
         } else {
             // write attack policies here.
-            FileRank nxt = nextPiece.getFileRank();
+            FileRank nxt = nfr;
             boolean nxtPieceIsLeftOrRight = Math.abs(nxt.getFile() - curr.getFile()) == 1;
             boolean nxtPieceIsTop = Math.abs(nxt.getRank() - curr.getRank()) == 1;
             boolean oppositeColors = this.getColorPiece() != nextPiece.getColorPiece();

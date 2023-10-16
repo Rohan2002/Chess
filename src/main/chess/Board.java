@@ -1,6 +1,5 @@
 package chess;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,20 +8,18 @@ import chess.Piece.Color;
 
 public class Board {
 
-    public enum checkMateType {
-        checkmate, check, none
-    };
-
     private int _board_dim;
     private Piece[][] board;
     private Set<Piece> alivePieces;
     private Color activeColor;
+    private CheckMate gameCheckMateObject;
 
     public Board() {
         this._board_dim = 8;
         this.board = new Piece[_board_dim][_board_dim];
         this.alivePieces = new HashSet<Piece>();
         this.activeColor = null;
+        this.gameCheckMateObject = null;
     }
 
     public Piece[] createPawnRank(Color c) {
@@ -89,6 +86,14 @@ public class Board {
         this.board[7] = createNonPawnRank(Color.white);
     }
 
+    public CheckMate getGameCheckmateObject() {
+        return this.gameCheckMateObject;
+    }
+
+    public void setGameCheckmateObject(CheckMate check) {
+        this.gameCheckMateObject = check;
+    }
+
     public Color getActiveColor() {
         return this.activeColor;
     }
@@ -113,113 +118,6 @@ public class Board {
         return 8 - fr.getRank();
     }
 
-    public ArrayList<FileRank> possibleKingPositions(Board b, Piece currentKingPiece) {
-        FileRank currKingPosition = currentKingPiece.getFileRank();
-
-        int[] possibleRanks = { currKingPosition.getRank() - 1, currKingPosition.getRank(),
-                currKingPosition.getRank() + 1 };
-        char[] possibleFiles = { (char) (currKingPosition.getFile() - 1), currKingPosition.getFile(),
-                (char) (currKingPosition.getFile() + 1) };
-
-        ArrayList<FileRank> PossibleKingFrs = new ArrayList<>();
-        for (char possibleFile : possibleFiles) {
-            for (int possibleRank : possibleRanks) {
-                try {
-                    FileRank fr = new FileRank("" + possibleFile + possibleRank);
-                    Piece currentPiece = getPiece(fr);
-                    if (currentPiece != null && !currentPiece.equals(currentKingPiece)
-                            && currentPiece.getColorPiece() == currentKingPiece.getColorPiece()) {
-                        continue;
-                    }
-                    PossibleKingFrs.add(fr);
-                } catch (IllegalArgumentException exception) {
-                    continue;
-                }
-            }
-        }
-        return PossibleKingFrs;
-    }
-
-    public checkMateType isCheckMate() {
-        /*
-         * White King. This is under attack.
-         * -> White King cannot escape the attack. Checkmate
-         * -> White King can escape the attack. Check
-         * 
-         * Black piece can attack white king.
-         * 
-         * 1. White king position in the board.
-         * -> All the possible positions that king placed.
-         *
-         * Set data structure: Board class state. AlivePieces
-         * 
-         * Loop throgh all possible white king positio.
-         * 
-         * 
-         * Get all black AlivePieces and check if
-         */
-        // freedom movements. Checkmate not possible.
-        if (this.activeColor == null) {
-            return checkMateType.none;
-        }
-        Color attackerColor = this.activeColor;
-        Color victimColor = this.activeColor == Color.black ? Color.white : Color.black;
-
-        Piece victimKing = null;
-
-        // get vicitim's king position.
-        for (Piece p : this.alivePieces) {
-            if (p.getColorPiece() == victimColor && p.getPieceType() == Piece.PieceType.king) {
-                victimKing = p;
-            }
-        }
-        // if victim is is missing something is wrong with the game. Checkmate is not
-        // possible.
-        if (victimKing == null) {
-            return checkMateType.none;
-        }
-
-        ArrayList<FileRank> possibleKingPositions = possibleKingPositions(this, victimKing);
-
-        boolean[] unSafeKingPositions = new boolean[possibleKingPositions.size()];
-        // No unsafe position means that the king is safe.
-
-        // Goal: Checkmate: all are unsafe positions.
-        int i = 0;
-
-        // all posibile location that vicitim king can go too.
-        for (FileRank possibleKingPosition : possibleKingPositions) {
-            boolean safePosition = true;
-            for (Piece alivePiece : this.alivePieces) {
-                // make sure alivePiece is opposite color.
-                if (alivePiece.getColorPiece() != attackerColor) {
-                    continue;
-                }
-
-                if (alivePiece.canMove(this, victimKing, possibleKingPosition)) {
-                    safePosition = false;
-                }
-            }
-            if (!safePosition) {
-                unSafeKingPositions[i] = true;
-            }
-            i++;
-        }
-        int unSafePositionCount = 0;
-        for (boolean unSafeKingPosition : unSafeKingPositions) {
-            if (unSafeKingPosition) {
-                unSafePositionCount++;
-            }
-        }
-        if (unSafePositionCount == 0) {
-            return checkMateType.none;
-        } else if (unSafePositionCount < unSafeKingPositions.length) {
-            return checkMateType.check;
-        } else {
-            return checkMateType.checkmate;
-        }
-    }
-
     public boolean setPiece(String currFrString, String nextFrString) {
         // TODO: Cannot attack king
         FileRank cfr = new FileRank(currFrString);
@@ -241,6 +139,16 @@ public class Board {
 
         // canMove will define the move and attack policies for a piece.
         if (currentPiece.canMove(this, nextPiece, nfr)) {
+            if (this.getGameCheckmateObject() != null && currentPiece.getPieceType() == Piece.PieceType.king) {
+                // dont put the active king in check position.
+                ArrayList<FileRank> kingCheckPositions = this.getGameCheckmateObject().getCheckMatePos();
+                for (FileRank kingPos : kingCheckPositions) {
+                    if (nfr.equals(kingPos)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
             // remove old piece
             if (this.alivePieces.contains(currentPiece)) {
                 this.alivePieces.remove(currentPiece);
