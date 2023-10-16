@@ -48,6 +48,10 @@ public class FileRank {
         this.rank = rank;
     }
 
+    public boolean equals(FileRank fr){
+        return fr.getFile() == this.getFile() && fr.getRank() == this.getRank();
+    }
+
     @Override
     public String toString() {
         return "" + this.file + this.rank;

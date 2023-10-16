@@ -1,7 +1,7 @@
 package chess;
 
 public class King extends Piece {
-    public King(Color c, FileRank fr){
+    public King(Color c, FileRank fr) {
         super(c, Piece.PieceType.king, fr);
     }
 
@@ -17,22 +17,16 @@ public class King extends Piece {
         int totalFile = nfr.getFile() - curr.getFile();
         int totalRank = nfr.getRank() - curr.getRank();
 
-        if (Math.abs(totalFile) <= 1 && Math.abs(totalRank) <= 1)
-        {
-            if (nextPiece == null)
-            {
+        if (Math.abs(totalFile) <= 1 && Math.abs(totalRank) <= 1) {
+            if (nextPiece == null) {
                 return true;
-            }
-            else if (this.getColorPiece() != nextPiece.getColorPiece())
-            {
+            } else if (this.getColorPiece() != nextPiece.getColorPiece()) {
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
         return false;
     }
-    
+
 }
