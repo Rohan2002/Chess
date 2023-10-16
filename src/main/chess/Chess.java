@@ -111,17 +111,29 @@ public class Chess {
 	 *         the contents of the returned ReturnPlay instance.
 	 */
 	public static ReturnPlay play(String move) {
-		String[] inputStrings = move.split(" ");
-
 		Color activeColor = turns % 2 == 0 ? Color.white : Color.black;
 		chessBoard.setActiveColor(activeColor);
 
+		if (move.equals("resign")) {
+			ReturnPlay rp = new ReturnPlay();
+
+			rp.message = chessBoard.getActiveColor() == Color.white ? ReturnPlay.Message.RESIGN_BLACK_WINS
+					: ReturnPlay.Message.RESIGN_WHITE_WINS;
+
+			rp.piecesOnBoard = new ArrayList<ReturnPiece>();
+			fillFinalPiecesBoard(rp.piecesOnBoard, chessBoard.getBoard());
+
+			return rp;
+		}
+
+		String[] inputStrings = move.split(" ");
+		boolean drawWasAsked = inputStrings[inputStrings.length - 1].equals("draw?");
+
 		ReturnPlay rp = new ReturnPlay();
 		boolean setPieceStatus = false;
-		try{
+		try {
 			setPieceStatus = chessBoard.setPiece(inputStrings[0], inputStrings[1]);
-		}
-		catch (IllegalArgumentException e){
+		} catch (IllegalArgumentException e) {
 			setPieceStatus = false;
 		}
 		chessBoard.setGameCheckmateObject(null);
@@ -132,13 +144,14 @@ public class Chess {
 		if (setPieceStatus) {
 			CheckMate c = CheckMate.isCheckMate(chessBoard);
 			if (c.getType() == CheckMate.CheckMateType.checkmate) {
-				rp.message = activeColor == Color.white ? ReturnPlay.Message.CHECKMATE_WHITE_WINS
-						: ReturnPlay.Message.CHECKMATE_BLACK_WINS;
+				rp.message = drawWasAsked ? ReturnPlay.Message.DRAW
+						: (activeColor == Color.white ? ReturnPlay.Message.CHECKMATE_WHITE_WINS
+								: ReturnPlay.Message.CHECKMATE_BLACK_WINS);
 			} else if (c.getType() == CheckMate.CheckMateType.check) {
-				rp.message = ReturnPlay.Message.CHECK;
+				rp.message = drawWasAsked ? ReturnPlay.Message.DRAW : ReturnPlay.Message.CHECK;
 				chessBoard.setGameCheckmateObject(c);
 			} else {
-				rp.message = null;
+				rp.message = drawWasAsked ? ReturnPlay.Message.DRAW : null;
 			}
 			turns++;
 		} else {
@@ -156,17 +169,5 @@ public class Chess {
 		chessBoard = new Board();
 		chessBoard.initBoard();
 		chessBoard.setActiveColor(Color.white); // start white for first move.
-	}
-
-	public static void main(String[] args) {
-		Chess.start();
-		Chess.play("d2 d4");
-		Chess.play("e7 e5");
-		Chess.play("d4 d5");
-		Chess.play("e5 e4");
-		Chess.play("d5 d6");
-		Chess.play("e8 e7");
-
-		
 	}
 }
