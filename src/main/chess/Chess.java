@@ -2,7 +2,6 @@ package chess;
 
 import java.util.ArrayList;
 
-import chess.Board.checkMateType;
 import chess.Piece.Color;
 import chess.ReturnPiece.PieceFile;
 
@@ -118,26 +117,31 @@ public class Chess {
 		chessBoard.setActiveColor(activeColor);
 
 		ReturnPlay rp = new ReturnPlay();
-
-		boolean setPieceStatus = chessBoard.setPiece(inputStrings[0], inputStrings[1]);
+		boolean setPieceStatus = false;
+		try{
+			setPieceStatus = chessBoard.setPiece(inputStrings[0], inputStrings[1]);
+		}
+		catch (IllegalArgumentException e){
+			setPieceStatus = false;
+		}
+		chessBoard.setGameCheckmateObject(null);
 
 		rp.piecesOnBoard = new ArrayList<ReturnPiece>();
 		fillFinalPiecesBoard(rp.piecesOnBoard, chessBoard.getBoard());
 
 		if (setPieceStatus) {
-			checkMateType c = chessBoard.isCheckMate();
-			if(c == checkMateType.checkmate){
-				rp.message = activeColor == Color.white ? ReturnPlay.Message.CHECKMATE_WHITE_WINS: ReturnPlay.Message.CHECKMATE_BLACK_WINS; 
-			}
-			else if(c == checkMateType.check){
+			CheckMate c = CheckMate.isCheckMate(chessBoard);
+			if (c.getType() == CheckMate.CheckMateType.checkmate) {
+				rp.message = activeColor == Color.white ? ReturnPlay.Message.CHECKMATE_WHITE_WINS
+						: ReturnPlay.Message.CHECKMATE_BLACK_WINS;
+			} else if (c.getType() == CheckMate.CheckMateType.check) {
 				rp.message = ReturnPlay.Message.CHECK;
-			}
-			else{
+				chessBoard.setGameCheckmateObject(c);
+			} else {
 				rp.message = null;
 			}
 			turns++;
-		} 
-		else {
+		} else {
 			rp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 		}
 		return rp;
@@ -153,25 +157,16 @@ public class Chess {
 		chessBoard.initBoard();
 		chessBoard.setActiveColor(Color.white); // start white for first move.
 	}
+
 	public static void main(String[] args) {
 		Chess.start();
-		Chess.play("e2 e4");
-		Chess.play("e7 e5");
 		Chess.play("d2 d4");
-		Chess.play("a7 a5");
+		Chess.play("e7 e5");
 		Chess.play("d4 d5");
+		Chess.play("e5 e4");
 		Chess.play("d5 d6");
-		Chess.play("h7 h5");
-		Chess.play("d7 d6");
-		Chess.play("c4 c5");
-		Chess.play("d6 c5");
-		Chess.play("d5 d6");
-		Chess.play("b7 d6");
-		Chess.play("d6 d7");
-		System.out.println(Chess.chessBoard);
-		
-		
-		
+		Chess.play("e8 e7");
+
 		
 	}
 }
