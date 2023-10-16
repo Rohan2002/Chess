@@ -1,6 +1,7 @@
 package src.test.chess;
 
 import chess.Board;
+import chess.CheckMate;
 import chess.Piece.Color;
 
 public class TestCheck {
@@ -25,7 +26,7 @@ public class TestCheck {
         b.setPiece("d8", "h4");
         System.out.println(b);
         
-        System.out.println(b.isCheckMate());
+        assert CheckMate.isCheckMate(b).getType() == CheckMate.CheckMateType.checkmate;
     }
 
 }
