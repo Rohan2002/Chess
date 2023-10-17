@@ -1,7 +1,5 @@
 package chess;
 
-import java.util.Objects;
-
 public class FileRank {
     private char file;
     private int rank;
