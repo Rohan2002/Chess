@@ -142,6 +142,7 @@ public class Chess {
 		} catch (IllegalArgumentException e) {
 			setPieceStatus = false;
 		}
+
 		chessBoard.setGameCheckmateObject(null);
 
 		rp.piecesOnBoard = new ArrayList<ReturnPiece>();

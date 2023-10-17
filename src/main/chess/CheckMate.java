@@ -80,6 +80,7 @@ public class CheckMate {
          */
         // freedom movements. Checkmate not possible.
         ArrayList<FileRank> attackableKingPositions = new ArrayList<>();
+        ArrayList<FileRank> defendableKingPositions = new ArrayList<>();
 
         if (b.getActiveColor() == null) {
             return new CheckMate(CheckMateType.none, attackableKingPositions);
@@ -104,6 +105,8 @@ public class CheckMate {
         ArrayList<FileRank> possibleKingPositions = possibleKingPositions(b, victimKing);
 
         boolean[] unSafeKingPositions = new boolean[possibleKingPositions.size()];
+        boolean[] SafeKingPositions = new boolean[possibleKingPositions.size()];
+
         // No unsafe position means that the king is safe.
         // Goal: Checkmate: all are unsafe positions.
 
@@ -112,6 +115,21 @@ public class CheckMate {
         // all posibile location that vicitim king can go too.
         for (FileRank possibleKingPosition : possibleKingPositions) {
             int safePosition = -1; // we dont know yet.
+            int unSafePosition = -1;
+            for (Piece alivePiece : b.getAlivePieces()) {
+                // make sure alivePiece is same color.
+                if (alivePiece.getColorPiece() == victimColor) {
+                    // different team as king that is under attack.
+                    // try to attack king in possible king location
+                    if (!alivePiece.equals(victimKing)
+                            && alivePiece.canMove(b, b.getPiece(possibleKingPosition), possibleKingPosition)
+                            && !victimKing.getFileRank().equals(possibleKingPosition)) {
+                        defendableKingPositions.add(possibleKingPosition);
+                        safePosition = 1;
+                        break;
+                    }
+                }
+            }
             for (Piece alivePiece : b.getAlivePieces()) {
                 // make sure alivePiece is opposite color.
                 if (alivePiece.getColorPiece() == attackerColor) {
@@ -119,15 +137,24 @@ public class CheckMate {
                     // try to attack king in possible king location
                     if (alivePiece.canMove(b, victimKing, possibleKingPosition)) {
                         attackableKingPositions.add(possibleKingPosition);
-                        safePosition = 0;
+                        unSafePosition = 1;
                         break;
                     }
                 }
             }
-            if (safePosition == 0) {
+            if (safePosition == 1) {
+                SafeKingPositions[i] = true;
+            }
+            if (unSafePosition == 1) {
                 unSafeKingPositions[i] = true;
             }
             i++;
+        }
+        int safePositionCount = 0;
+        for (boolean safeKingPosition : SafeKingPositions) {
+            if (safeKingPosition) {
+                safePositionCount++;
+            }
         }
         int unSafePositionCount = 0;
         for (boolean unSafeKingPosition : unSafeKingPositions) {
@@ -137,7 +164,8 @@ public class CheckMate {
         }
         if (unSafePositionCount == 0) {
             return new CheckMate(CheckMateType.none, possibleKingPositions);
-        } else if (unSafePositionCount < unSafeKingPositions.length) {
+        } else if (unSafePositionCount < unSafeKingPositions.length
+                || (safePositionCount > 0 && safePositionCount < SafeKingPositions.length)) {
             return new CheckMate(CheckMateType.check, possibleKingPositions);
         } else {
             return new CheckMate(CheckMateType.checkmate, possibleKingPositions);

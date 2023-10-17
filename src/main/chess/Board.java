@@ -235,6 +235,7 @@ public class Board {
         }
         this.board[getRow(fileRankP)][getCol(fileRankP)] = null;
     }
+    
 
     public Piece getPiece(String fileRank) {
         FileRank fr = new FileRank(fileRank);
