@@ -50,12 +50,19 @@ public abstract class Piece {
         this.pieceType = pieceType;
     }
 
-    public boolean equals(Piece p){
-        return (
-            p.getColorPiece() == this.getColorPiece() &&
-            p.getFileRank() == this.getFileRank() &&
-            p.getPieceType() == this.getPieceType()
-        );
+    public boolean equals(Piece p) {
+        return (p.getColorPiece() == this.getColorPiece() &&
+                p.getFileRank() == this.getFileRank() &&
+                p.getPieceType() == this.getPieceType());
+    }
+
+    public void resetEnpassant(Board b) {
+        Color color = this.getColorPiece();
+        for (Piece p : b.getAlivePieces()) {
+            if (p.getColorPiece() == color && p.getPieceType() == Piece.PieceType.pawn && p instanceof Pawn) {
+                ((Pawn) p).setEnpassant(false);
+            }
+        }
     }
 
     @Override

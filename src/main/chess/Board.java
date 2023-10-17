@@ -149,8 +149,7 @@ public class Board {
             } else if (this.pawnPromotionDefault.equals("P")) {
                 King k = new King(currentPiece.getColorPiece(), currentPieceFr);
                 putPiece(k);
-            }
-            else{
+            } else {
                 // default is queen.
                 Queen q = new Queen(currentPiece.getColorPiece(), currentPieceFr);
                 putPiece(q);
@@ -178,7 +177,9 @@ public class Board {
         }
 
         // canMove will define the move and attack policies for a piece.
+        currentPiece.resetEnpassant(this);
         if (currentPiece.canMove(this, nextPiece, nfr)) {
+
             if (this.getGameCheckmateObject() != null) {
                 // dont put the active piece in check position.
                 ArrayList<FileRank> kingCheckPositions = this.getGameCheckmateObject().getCheckMatePos();
@@ -221,6 +222,18 @@ public class Board {
         }
         this.board[getRow(fileRankP)][getCol(fileRankP)] = p;
         this.getAlivePieces().add(p);
+    }
+
+    public void removePiece(Piece p) {
+        if (p == null) {
+            return;
+        }
+        FileRank fileRankP = p.getFileRank();
+        Piece existingPiece = this.board[getRow(fileRankP)][getCol(fileRankP)];
+        if (existingPiece != null && this.getAlivePieces().contains(existingPiece)) {
+            this.getAlivePieces().remove(existingPiece);
+        }
+        this.board[getRow(fileRankP)][getCol(fileRankP)] = null;
     }
 
     public Piece getPiece(String fileRank) {

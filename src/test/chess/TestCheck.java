@@ -25,7 +25,7 @@ public class TestCheck {
         b.setActiveColor(Color.black);
         b.setPiece("d8", "h4");
         System.out.println(b);
-        
+
         assert CheckMate.isCheckMate(b).getType() == CheckMate.CheckMateType.checkmate;
     }
 

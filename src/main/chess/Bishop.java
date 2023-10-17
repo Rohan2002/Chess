@@ -1,7 +1,7 @@
 package chess;
 
 public class Bishop extends Piece {
-    public Bishop(Color c, FileRank fr){
+    public Bishop(Color c, FileRank fr) {
         super(c, Piece.PieceType.bishop, fr);
     }
 
@@ -16,29 +16,20 @@ public class Bishop extends Piece {
         int totalFile = nfr.getFile() - curr.getFile();
         int totalRank = nfr.getRank() - curr.getRank();
 
-        if (Math.abs(totalFile) == Math.abs(totalRank))
-        {
-            if (jumpDiagonal(b, nextPiece, nfr))
-            {
-                if (nextPiece == null)
-                {
+        if (Math.abs(totalFile) == Math.abs(totalRank)) {
+            if (jumpDiagonal(b, nextPiece, nfr)) {
+                if (nextPiece == null) {
                     return true;
-                }
-                else if (this.getColorPiece() != nextPiece.getColorPiece())
-                {
+                } else if (this.getColorPiece() != nextPiece.getColorPiece()) {
                     return true;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
-            }
-            else
-            {
+            } else {
                 return false;
-            }   
+            }
         }
         return false;
     }
-    
+
 }

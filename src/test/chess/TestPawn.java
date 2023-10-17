@@ -10,7 +10,7 @@ public class TestPawn {
 
         boolean test1_b = b.setPiece("e2", "e4"); // init start
         assert test1_b == true;
-        
+
         b.initBoard();
         boolean test1_a = b.setPiece("e2", "e3");
         assert test1_a == true;
@@ -34,7 +34,7 @@ public class TestPawn {
         assert true == b.setPiece("d6", "d5");
         assert true == b.setPiece("d5", "d4");
         assert true == b.setPiece("e3", "d4"); // attack.
-        
+
         // attack sequence. black pawn attacks white pawn
         b.initBoard();
         assert true == b.setPiece("e7", "e5");
@@ -46,15 +46,14 @@ public class TestPawn {
         b.initBoard();
         assert true == b.setPiece("e2", "e4");
         assert false == b.setPiece("e4", "e3");
-        
+
         // move black back (instead of forward) should be false
         assert true == b.setPiece("e7", "e5");
         assert false == b.setPiece("e5", "e4");
-        
+
         // Try to attack white -> black pawn forward only.
         assert false == b.setPiece("e4", "e5");
-        
-        
+
     }
 
 }
