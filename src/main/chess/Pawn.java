@@ -3,9 +3,19 @@ package chess;
 import java.lang.Math;
 
 public class Pawn extends Piece {
-    boolean enpassant;
+    private boolean enpassant;
+
     public Pawn(Color c, FileRank fr) {
         super(c, Piece.PieceType.pawn, fr);
+        this.enpassant = false;
+    }
+
+    public boolean getEnpassant() {
+        return this.enpassant;
+    }
+
+    public void setEnpassant(boolean enpassant) {
+        this.enpassant = enpassant;
     }
 
     @Override
@@ -34,18 +44,22 @@ public class Pawn extends Piece {
 
             boolean sameColumn = curr.getFile() == nfr.getFile();
 
-            /*else if (willEnpassant(b, nfr, nextPiece, curr, promo))
-            {
-                return true;
-            }*/
-            // else if (nfr.getRank() - curr.getRank() == 2 && (sameColumn && (whitePawnUpwards || blackPawnDownwards)))
-            // {
-            //     enpassant = true;
-            // }
+            /*
+             * else if (willEnpassant(b, nfr, nextPiece, curr, promo))
+             * {
+             * return true;
+             * }
+             */
+            boolean validPawnMove = sameColumn && (whitePawnUpwards || blackPawnDownwards);
+            if (Math.abs(nfr.getRank() - curr.getRank()) == 2 && validPawnMove) {
+                this.setEnpassant(true);
+            }
 
-            return sameColumn && (whitePawnUpwards || blackPawnDownwards);
-        } 
-        else {
+            boolean enPassantValid = enpassant(b, nfr, this);
+
+            return enPassantValid || validPawnMove; // Valid Enpassant move will move pawn OR Valid Pawn move will move
+                                                    // pawn.
+        } else {
             // write attack policies here.
             FileRank nxt = nfr;
             boolean nxtPieceIsLeftOrRight = Math.abs(nxt.getFile() - curr.getFile()) == 1;
@@ -55,49 +69,51 @@ public class Pawn extends Piece {
         }
     }
 
-    /*public boolean enpassant(Board b, FileRank nfr, Piece evalPiece, FileRank curr)
-    {
-        if ()
-        {
+    public boolean enpassant(Board b, FileRank nfr, Piece evalPiece) {
+        FileRank curr = evalPiece.getFileRank();
+        int currRank = curr.getRank();
 
-        }
-        return true;
-    }
-
-    public boolean willEnpassant(Board b, FileRank nfr, Piece evalPiece, FileRank curr, char changedPiece)
-    {
-        char currFile = curr.getFile();
-        int currRank = curr.getRank(); 
-
-        char nextMoveFile = nfr.getFile();
-        int nextMoveRank = nfr.getRank();
-
-        Piece potentialEnpassantVictim = b.getPiece(new FileRank("" + ((char) (nfr.getFile()+1)) + (nfr.getRank())));
-
-        if (currRank == 5 && evalPiece.getColorPiece() == Piece.Color.white)
-        {
-            if (nfr.equals(new FileRank("" + ((char) (curr.getFile()+1)) + (curr.getRank()+1))) || 
-                nfr.equals(new FileRank("" + ((char) (curr.getFile()-1)) + (curr.getRank()+1))) )
-            {
-                if (potentialEnpassantVictim.getPieceType() == Piece.PieceType.pawn)
-                {
-                    if (((Pawn) potentialEnpassantVictim).enpassant == true)
-                    {
-                        enpassant(b, nfr, evalPiece, curr);
+        if (currRank == 5 && evalPiece.getColorPiece() == Piece.Color.white) {
+            if (nfr.equals(new FileRank("" + ((char) (curr.getFile() + 1)) + (curr.getRank() + 1)))) {
+                Piece potentialEnpassantVictim = b
+                        .getPiece(new FileRank("" + ((char) (nfr.getFile())) + (nfr.getRank() - 1)));
+                if (potentialEnpassantVictim.getPieceType() == Piece.PieceType.pawn) {
+                    if (((Pawn) potentialEnpassantVictim).enpassant == true) {
+                        b.removePiece(potentialEnpassantVictim);
+                        return true;
+                    }
+                }
+            } else if (nfr.equals(new FileRank("" + ((char) (curr.getFile() - 1)) + (curr.getRank() + 1)))) {
+                Piece potentialEnpassantVictim = b
+                        .getPiece(new FileRank("" + ((char) (nfr.getFile())) + (nfr.getRank() - 1)));
+                if (potentialEnpassantVictim.getPieceType() == Piece.PieceType.pawn) {
+                    if (((Pawn) potentialEnpassantVictim).enpassant == true) {
+                        b.removePiece(potentialEnpassantVictim);
+                        return true;
                     }
                 }
             }
-            return true;
+        } else if (currRank == 4 && evalPiece.getColorPiece() == Piece.Color.black) {
+            if (nfr.equals(new FileRank("" + ((char) (curr.getFile() + 1)) + (curr.getRank() - 1)))) {
+                Piece potentialEnpassantVictim = b
+                        .getPiece(new FileRank("" + ((char) (nfr.getFile())) + (nfr.getRank() + 1)));
+                if (potentialEnpassantVictim.getPieceType() == Piece.PieceType.pawn) {
+                    if (((Pawn) potentialEnpassantVictim).enpassant == true) {
+                        b.removePiece(potentialEnpassantVictim);
+                        return true;
+                    }
+                }
+            } else if (nfr.equals(new FileRank("" + ((char) (curr.getFile() - 1)) + (curr.getRank() - 1)))) {
+                Piece potentialEnpassantVictim = b
+                        .getPiece(new FileRank("" + ((char) (nfr.getFile())) + (nfr.getRank() + 1)));
+                if (potentialEnpassantVictim.getPieceType() == Piece.PieceType.pawn) {
+                    if (((Pawn) potentialEnpassantVictim).enpassant == true) {
+                        b.removePiece(potentialEnpassantVictim);
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
-
-    public void resetEnpassant(Board b, Color color)
-    {
-        for (Piece p : b.getAlivePieces()) {
-            if (p.getColorPiece() == color && p.getPieceType() == Piece.PieceType.pawn) {
-                ((Pawn) p).enpassant = false;
-            }
-        }
-    }*/
 }

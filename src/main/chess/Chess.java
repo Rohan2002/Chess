@@ -128,7 +128,9 @@ public class Chess {
 
 		String[] inputStrings = move.split(" ");
 		boolean drawWasAsked = inputStrings[inputStrings.length - 1].equals("draw?");
-		if (inputStrings.length > 2){
+
+		// pawn promotion.
+		if (inputStrings.length > 2) {
 			chessBoard.setPawnPromotionDefault(inputStrings[2]);
 		}
 
@@ -172,5 +174,17 @@ public class Chess {
 		chessBoard = new Board();
 		chessBoard.initBoard();
 		chessBoard.setActiveColor(Color.white); // start white for first move.
+	}
+
+	public static void main(String[] args) {
+		Chess.start();
+		Chess.play("e2 e4");
+		Chess.play("a7 a5");
+		Chess.play("e4 e5");
+		Chess.play("a5 a4");
+		Chess.play("h2 h3");
+		Chess.play("d7 d5");
+		Chess.play("e5 d6");
+
 	}
 }

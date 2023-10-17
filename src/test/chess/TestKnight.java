@@ -12,7 +12,6 @@ public class TestKnight {
         assert test1 == true;
         System.out.println(b);
 
-
         boolean test2 = b.setPiece("c3", "d1"); // white knight valid but existing piece.
         assert test2 == false;
         System.out.println(b);
@@ -35,6 +34,6 @@ public class TestKnight {
         boolean test7 = b.setPiece("e7", "g6"); // white knight attack.
         assert test7 == true;
         System.out.println(b);
-        
+
     }
 }

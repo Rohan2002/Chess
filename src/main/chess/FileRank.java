@@ -1,10 +1,12 @@
 package chess;
+
 import java.util.Objects;
 
 public class FileRank {
     private char file;
     private int rank;
-    public static char[] files = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+    public static char[] files = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+
     /*
      * FileRank.
      * 
@@ -23,7 +25,7 @@ public class FileRank {
         this.rank = rank;
     }
 
-    public void boundCheckFileRank(int file, int rank){
+    public void boundCheckFileRank(int file, int rank) {
         if (rank < 1 || rank > 8) {
             throw new IllegalArgumentException("Invalid rank index (valid: 1 to 8): " + rank);
         }
@@ -48,7 +50,7 @@ public class FileRank {
         this.rank = rank;
     }
 
-    public boolean equals(FileRank fr){
+    public boolean equals(FileRank fr) {
         return fr.getFile() == this.getFile() && fr.getRank() == this.getRank();
     }
 

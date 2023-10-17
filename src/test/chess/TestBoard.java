@@ -35,23 +35,22 @@ public class TestBoard {
         // assert kingPoss.size() == expectedKingPoss.size();
         // boolean listEqual = true;
         // for (int i = 0; i < kingPoss.size(); i++) {
-        //     if (!kingPoss.get(i).equals(expectedKingPoss.get(i))) {
-        //         listEqual = false;
-        //         break;
-        //     }
+        // if (!kingPoss.get(i).equals(expectedKingPoss.get(i))) {
+        // listEqual = false;
+        // break;
+        // }
         // }
         // assert listEqual == true;
-
 
         ArrayList<Integer> t1 = new ArrayList<Integer>();
         t1.add(1);
         t1.add(2);
         t1.add(3);
         int counter = 0;
-        for (Integer i: t1){
-            for(Integer j: t1){
+        for (Integer i : t1) {
+            for (Integer j : t1) {
                 System.out.println("j: " + j);
-                if (j == 1){
+                if (j == 1) {
                     break;
                 }
             }

@@ -7,8 +7,7 @@ import chess.Pawn;
 import chess.Piece;
 
 public class TestCastling {
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
         Board b = new Board();
         b.initBoard();
         System.out.println(b);
@@ -28,15 +27,15 @@ public class TestCastling {
         assert test1_d == true;
         System.out.println(b);
 
-        boolean test1_c = b.setPiece("d8", "d6"); 
+        boolean test1_c = b.setPiece("d8", "d6");
         assert test1_c == true;
         System.out.println(b);
-        
-        boolean test1_a = b.setPiece("c8", "a6"); 
+
+        boolean test1_a = b.setPiece("c8", "a6");
         assert test1_a == true;
         System.out.println(b);
 
-        boolean test4 = b.setPiece("b8", "c6"); 
+        boolean test4 = b.setPiece("b8", "c6");
         assert test4 == true;
         System.out.println(b);
 
@@ -44,9 +43,11 @@ public class TestCastling {
 
         System.out.println(king.castling(b, new FileRank("" + 'c' + 8), king, king.getFileRank()));
 
-        /*boolean test2 = b.setPiece("e2", "e3");
-        assert test2 == true;
-        System.out.println(b);*/
+        /*
+         * boolean test2 = b.setPiece("e2", "e3");
+         * assert test2 == true;
+         * System.out.println(b);
+         */
     }
 
 }

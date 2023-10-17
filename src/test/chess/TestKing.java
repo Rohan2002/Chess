@@ -4,8 +4,7 @@ import chess.Board;
 import chess.Piece;
 
 public class TestKing {
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
         Board b = new Board();
         b.initBoard();
         System.out.println(b);
@@ -24,7 +23,7 @@ public class TestKing {
         boolean test1_c = b.setPiece("e4", "e5"); // moves pawn away from king
         assert test1_c == true;
         System.out.println(b);
-        
+
         boolean test1_a = b.setPiece("e1", "e2"); // king goes forward
         assert test1_a == true;
         System.out.println(b);
@@ -36,7 +35,7 @@ public class TestKing {
         boolean test3 = b.setPiece("e3", "e4");
         assert test3 == true;
         System.out.println(b);
-        
+
         boolean test4 = b.setPiece("e4", "e3"); // king goes backward
         assert test4 == true;
         System.out.println(b);
